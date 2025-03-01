@@ -1,0 +1,66 @@
+# General
+.DS_Store
+Thumbs.db
+
+# Virtual Environment
+venv/
+.venv/
+env/
+env.bak/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs
+logs/
+*.log
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Python Packages
+*.egg-info/
+build/
+dist/
+
+# Data Files (Large datasets or intermediate files)
+data/
+*.csv
+*.tsv
+*.json
+*.xlsx
+*.db
+*.sqlite
+*.h5
+*.parquet
+
+# Machine Learning Model Files
+models/
+*.h5
+*.pkl
+*.joblib
+
+# Outputs and temporary files
+output/
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+
+# Git merge conflict files
+*.rej
+*.orig
