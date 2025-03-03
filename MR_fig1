@@ -1,0 +1,79 @@
+# Load Libraries 
+```{r}
+library(tidyverse)
+```
+
+# Read Data 
+```{r}
+df_raw <- read_csv("FastFoodNutritionMenuV3.csv"
+```
+
+# Minor alteration of attributes for visualization
+```{r}
+# Remove spaces from colnames for ease of use 
+colnames(df_raw) <- colnames(df_raw) %>% 
+  str_replace_all("\n", " ") %>%
+  trimws() %>%
+  str_squish() %>%
+  str_replace_all(" ", "_") %>%
+  str_replace_all("\\(", "") %>%
+  str_replace_all("\\)", "")
+
+df_raw <- df_raw %>% 
+  mutate(across(-c("Company", "Item"), as.numeric),
+         Company = trimws(gsub("’", "'", Company)), # Remove white spaces, make apostrophes straight instead of curly
+         Company = factor(Company, levels = c(
+                                              "Burger King", 
+                                              "KFC", 
+                                              "McDonald's", 
+                                              "Pizza Hut", 
+                                              "Taco Bell", 
+                                              "Wendy's")))
+
+# Working data frame for the analysis 
+df <- df_raw
+```
+
+# Assign color palette for all visualizations
+```{r}
+customPalette <- c("Burger King" = "#ef476f",
+                   "KFC" = "#f78c6b",
+                   "McDonald's" = "#ffd166",
+                   "Pizza Hut" = "#06d6a0",
+                   "Taco Bell" = "#118ab2",
+                   "Wendy's" = "#073b4c")
+```
+
+# Distributions by Company 
+```{r}
+# Bar chart
+df %>%
+  group_by(Company) %>%
+  summarise(count = n()) %>%
+  ggplot(aes(x = reorder(Company, -count), y = count, fill = Company)) + 
+  geom_bar(stat = "identity") + 
+  geom_text(aes(label = count), vjust = -0.5, size = 5 ) +
+  scale_fill_manual(values = customPalette, name = "Company") + 
+  labs(title = "Distribution of Menu Items Across Companies", 
+       y = "Number of menu items", 
+       x = "Company") 
+
+# Pie chart
+df %>%
+  group_by(Company) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  mutate(total = sum(count),
+         percent = (count/total) *100) %>%
+  ggplot(aes(x = "", y = count, fill = Company)) + 
+  geom_bar(stat = "identity", width = 1)  + 
+  coord_polar(theta = "y") + 
+  geom_text(aes(label = paste(round(percent, 1), "%")), 
+            color = "white", 
+            fontface = "bold", 
+            position = position_stack(vjust = .5)) + 
+  scale_fill_manual(values = customPalette, name = "Company") + 
+  labs(title = "Distribution of Menu Items Across Companies", 
+       y = "Number of menu items", 
+       x = "Company") +
+  theme_void() 
+```
