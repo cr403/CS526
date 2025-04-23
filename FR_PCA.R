@@ -4,14 +4,18 @@ library(stats)
 
 # Build PCA 
 ```{r}
+# For the PCA, I'm going to use all variables except calories from fat and weight watchers score 
+# since these are both linearly derived from other variables (e.g., total fat/calories, sugar, 
+# saturated fat, and protein)
+
 pca_att <- c("Calories", "Total_Fat_g", "Saturated_Fat_g", 
                   "Trans_Fat_g", "Cholesterol_mg", "Sodium_mg", "Carbs_g", 
                   "Fiber_g", "Sugars_g", "Protein_g") 
 
 # separate numeric attributes from metadata 
-df_num <- df %>%
+df_num <- df_ww %>%
   select(pca_att) 
-df_meta <- df %>%
+df_meta <- df_ww %>%
   select(Company, Item) 
 
 # identify complete rows (no missing numerical values) 
